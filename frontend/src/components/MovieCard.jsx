@@ -1,0 +1,36 @@
+import { useNavigate } from "react-router-dom";
+
+const IMG_BASE = "https://image.tmdb.org/t/p/w500";
+
+function MovieCard({ movie }) {
+  const navigate = useNavigate();
+
+  const poster = movie.poster_path
+    ? `${IMG_BASE}${movie.poster_path}`
+    : "https://placehold.co/300x450?text=No+Image";
+
+  const rating = movie.vote_average?.toFixed(1);
+  const year = movie.release_date?.split("-")[0];
+
+  return (
+    <div
+      onClick={() => navigate(`/movie/${movie.id}`)}
+      className="bg-zinc-900 rounded-xl overflow-hidden cursor-pointer hover:scale-105 hover:ring-2 hover:ring-yellow-400 transition-all duration-200"
+    >
+      <div className="relative">
+        <img src={poster} alt={movie.title} className="w-full object-cover" />
+        <span className="absolute top-2 right-2 bg-black/70 text-yellow-400 text-xs font-bold px-2 py-1 rounded-md">
+          ⭐ {rating}
+        </span>
+      </div>
+      <div className="p-3">
+        <h3 className="text-white text-sm font-semibold truncate">
+          {movie.title}
+        </h3>
+        <p className="text-zinc-400 text-xs mt-1">{year}</p>
+      </div>
+    </div>
+  );
+}
+
+export default MovieCard;
