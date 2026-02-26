@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getTrending } from "../api/movie";
 import MovieCard from "../components/MovieCard";
+import Hero from "../components/Hero";
 
 function Home() {
   const [movies, setMovies] = useState([]);
@@ -25,6 +26,7 @@ function Home() {
   return (
     <div>
       <h1>🎬 Movie Browser</h1>
+      {movies.length > 0 && <Hero movie={movies[0]} />}
       <p>Trending This Week</p>
 
       {loading && <p>Loading Movies...</p>}
@@ -32,7 +34,7 @@ function Home() {
       {error && <p>{error}</p>}
 
       {!loading && !error && (
-        <div>
+        <div className="flex">
           {movies.map((movie) => (
             <div key={movie.id}>
               <MovieCard movie={movie} />
