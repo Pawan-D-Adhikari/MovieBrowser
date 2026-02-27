@@ -1,11 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Navbar from "./Navbar";
+
 const IMG_BASE = "https://image.tmdb.org/t/p/original";
 
 function Hero({ movie }) {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
 
   if (!movie) return null;
   const backdrop = movie.backdrop_path
@@ -14,12 +12,6 @@ function Hero({ movie }) {
 
   const year = movie.release_date.split("-")[0];
   const rating = movie.vote_average.toFixed(1);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!search.trim()) return;
-    navigate(`/search?q=${encodeURIComponent(search.trim())}`);
-  };
 
   return (
     <div className="relative w-full h-120 overflow-hidden ">

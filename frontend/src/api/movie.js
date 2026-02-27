@@ -33,3 +33,15 @@ export const searchMovies = async (query, page = 1) => {
     throw error;
   }
 };
+
+export const getMovieDetail = async (id) => {
+  try {
+    const res = await axios.get(`${BASE}/movie`, {
+      params: { id },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Search API error:", error);
+    throw error;
+  }
+};

@@ -72,4 +72,25 @@ router.get("/search", async (req, res) => {
   }
 });
 
+router.get("/movie", async (req, res) => {
+  const { id } = req.query;
+
+  if (!id) {
+    return res.status(400).json({ error: "id parameter is required" });
+  }
+
+  try {
+    const response = await axios.get(`${TMDB_BASE}/movie/${id}`, {
+      params: {
+        api_key: KEY,
+      },
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Failed to fetch movies detail" });
+  }
+});
+
 module.exports = router;
