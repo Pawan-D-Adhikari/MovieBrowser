@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getTrending, getTopRated, getUpcoming, getGenre } from "../api/movie";
 import MovieCard from "../components/MovieCard";
 import Hero from "../components/Hero";
+import { Carousel } from "@mantine/carousel";
 
 function Home() {
   const [trending, setTrending] = useState([]);
@@ -40,35 +41,72 @@ function Home() {
 
       {error && <p>{error}</p>}
 
-      <div className="flex flex-col px-4 py-3 min-w-0 w-full">
+      <div className="flex flex-col px-4 py-3 min-w-0 w-full ">
         <p className="text-white font-bold text-lg mb-2">Trending This Week</p>
-        <div className="flex overflow-x-auto overflow-y-hidden gap-3 pb-2 scrollbar-hide">
+
+        <Carousel
+          slideSize="10%"
+          breakpoints={[
+            { maxWidth: 1536, slideSize: "12%" },
+            { maxWidth: 1280, slideSize: "15%" },
+            { maxWidth: 1024, slideSize: "20%" },
+            { maxWidth: 768, slideSize: "30%" },
+            { maxWidth: 480, slideSize: "50%" },
+          ]}
+          slideGap="md"
+          align="start"
+          loop
+        >
           {trending.map((movie) => (
-            <div key={movie.id} className="shrink-0">
+            <Carousel.Slide key={movie.id}>
               <MovieCard movie={movie} genres={genres} />
-            </div>
+            </Carousel.Slide>
           ))}
-        </div>
+        </Carousel>
       </div>
       <div className="flex flex-col px-4 py-3 min-w-0 w-full">
         <p className="text-white font-bold text-lg mb-2">Top Rated Moives</p>
-        <div className="flex overflow-x-auto overflow-y-hidden gap-3 pb-2 scrollbar-hide">
+        <Carousel
+          slideSize="10%"
+          breakpoints={[
+            { maxWidth: 1536, slideSize: "12%" },
+            { maxWidth: 1280, slideSize: "15%" },
+            { maxWidth: 1024, slideSize: "20%" },
+            { maxWidth: 768, slideSize: "30%" },
+            { maxWidth: 480, slideSize: "50%" },
+          ]}
+          slideGap="md"
+          align="start"
+          loop
+        >
           {toprated.map((movie) => (
-            <div key={movie.id} className="shrink-0">
+            <Carousel.Slide key={movie.id}>
               <MovieCard movie={movie} genres={genres} />
-            </div>
+            </Carousel.Slide>
           ))}
-        </div>
+        </Carousel>
       </div>
       <div className="flex flex-col px-4 py-3 min-w-0 w-full">
         <p className="text-white font-bold text-lg mb-2">Upcoming</p>
-        <div className="flex overflow-x-auto overflow-y-hidden gap-3 pb-2 scrollbar-hide">
+        <Carousel
+          slideSize="10%"
+          breakpoints={[
+            { maxWidth: 1536, slideSize: "12%" },
+            { maxWidth: 1280, slideSize: "15%" },
+            { maxWidth: 1024, slideSize: "20%" },
+            { maxWidth: 768, slideSize: "30%" },
+            { maxWidth: 480, slideSize: "50%" },
+          ]}
+          slideGap="md"
+          align="start"
+          loop
+        >
           {upcoming.map((movie) => (
-            <div key={movie.id} className="shrink-0">
+            <Carousel.Slide key={movie.id}>
               <MovieCard movie={movie} genres={genres} />
-            </div>
+            </Carousel.Slide>
           ))}
-        </div>
+        </Carousel>
       </div>
     </div>
   );

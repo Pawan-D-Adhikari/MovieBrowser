@@ -19,7 +19,7 @@ function MovieCard({ movie, genres }) {
   return (
     <div
       onClick={() => navigate(`/movie/${movie.id}`)}
-      className="bg-zinc-900 rounded-xl w-40 cursor-pointer hover:scale-101 mt-1 ml-1 hover:ring-2 hover:ring-yellow-400 transition-all duration-200"
+      className="bg-zinc-900 rounded-xl w-40 mb-1  cursor-pointer hover:scale-101 mt-1 ml-1 hover:ring-2 hover:ring-yellow-400 transition-all duration-200"
     >
       <div className="relative rounded-xl overflow-hidden h-64">
         <img
