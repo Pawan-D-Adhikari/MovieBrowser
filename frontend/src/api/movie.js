@@ -20,3 +20,16 @@ export const getGenre = async () => {
   const res = await axios.get(`${BASE}/genre`);
   return res.data.genres;
 };
+
+export const searchMovies = async (query, page = 1) => {
+  try {
+    const res = await axios.get(`${BASE}/search`, {
+      params: { query, page },
+    });
+
+    return res.data.results;
+  } catch (error) {
+    console.error("Search API error:", error);
+    throw error;
+  }
+};

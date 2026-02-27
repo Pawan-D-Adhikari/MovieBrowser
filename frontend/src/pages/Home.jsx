@@ -3,6 +3,7 @@ import { getTrending, getTopRated, getUpcoming, getGenre } from "../api/movie";
 import MovieCard from "../components/MovieCard";
 import Hero from "../components/Hero";
 import { Carousel } from "@mantine/carousel";
+import Navbar from "../components/Navbar";
 
 function Home() {
   const [trending, setTrending] = useState([]);
@@ -35,6 +36,7 @@ function Home() {
 
   return (
     <div className="overflow-x-hidden overflow-y-auto w-full">
+      <Navbar />
       {trending.length > 0 && <Hero movie={trending[0]} />}
 
       {loading && <p>Loading Movies...</p>}
