@@ -12,25 +12,27 @@ function Navbar() {
   };
 
   return (
-    <div className="flex items-center justify-between px-5 py-3 w-full">
+    <div className="flex items-center justify-between px-6 py-4 w-full bg-zinc-900/95 backdrop-blur-sm  border-zinc-700/50">
       <span
-        className="text-white font-extrabold text-lg drop-shadow cursor-pointer"
+        className="text-white font-extrabold text-2xl tracking-tight cursor-pointer select-none hover:opacity-80 transition-opacity"
         onClick={() => navigate("/")}
       >
         🎬 Movie<span className="text-red-500">Browser</span>
       </span>
+
       <form onSubmit={handleSearch} className="flex items-center gap-2">
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search movies..."
-          className="bg-white/10 text-white placeholder-white/50 text-sm px-4 py-2 rounded-lg border border-white/20 focus:border-white/50 outline-none w-64 transition-all"
+          placeholder="🔍  Search movies..."
+          className="bg-zinc-800 text-white placeholder-zinc-500 text-sm px-4 py-2.5 rounded-xl border border-zinc-700 focus:border-red-500 focus:ring-1 focus:ring-red-500/40 outline-none w-72 transition-all duration-200"
         />
+
         <button
           type="submit"
-          className="text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors cursor-pointer"
-          style={{ backgroundColor: search.trim() ? "#ef4444" : "#6b7280" }}
+          disabled={!search.trim()}
+          className=" disabled:bg-zinc-700 disabled:text-zinc-500 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-red-400 active:bg-red-600 transition-all duration-200 cursor-pointer"
         >
           Search
         </button>

@@ -50,7 +50,6 @@ router.get("/genre", async (req, res) => {
   }
 });
 router.get("/search", async (req, res) => {
-  console.log("Search route hit");
   const { query, page = 1 } = req.query;
 
   if (!query) {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { searchMovies } from "../api/movie";
+import { searchMovies, getGenre } from "../api/movie";
 import MovieCard from "../components/MovieCard";
 import Navbar from "../components/Navbar";
 function Search() {
@@ -9,6 +9,19 @@ function Search() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [genres, setGenres] = useState([]);
+
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const GenreData = await getGenre();
+        setGenres(GenreData);
+      } catch (err) {
+        console.error("Failed to fetch genres");
+      }
+    };
+    fetchGenres();
+  }, []);
 
   useEffect(() => {
     if (!query) return;
@@ -28,18 +41,20 @@ function Search() {
   }, [query]);
 
   return (
-    <div className="px-4 py-6 text-white">
-      <div className="bg-zinc-800 border-b border-zinc-700">
+    <div className="  text-white">
+      <div className="bg-zinc-800 border-b border-zinc-700 ">
         <Navbar />
       </div>
-      <p className="text-lg font-bold mb-4">Results for: "{query}"</p>
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-400">{error}</p>}
-      {!loading && results.length === 0 && <p>No results found.</p>}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 ">
-        {results.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} genres={[]} />
-        ))}
+      <div className="px-4 py-4">
+        <p className="text-lg font-bold mb-3">Results for: "{query}"</p>
+        {loading && <p>Loading...</p>}
+        {error && <p className="text-red-400">{error}</p>}
+        {!loading && results.length === 0 && <p>No results found.</p>}
+        <div className="flex flex-wrap gap-4 ">
+          {results.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} genres={genres} />
+          ))}
+        </div>
       </div>
     </div>
   );
