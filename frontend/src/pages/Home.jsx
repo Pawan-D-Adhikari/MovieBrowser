@@ -1,47 +1,73 @@
 import { useEffect, useState } from "react";
-import { getTrending } from "../api/movie";
+import { getTrending, getTopRated, getUpcoming } from "../api/movie";
 import MovieCard from "../components/MovieCard";
 import Hero from "../components/Hero";
 
 function Home() {
-  const [movies, setMovies] = useState([]);
+  const [trending, setTrending] = useState([]);
+  const [toprated, setToprated] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchTrending = async () => {
+    const fetchAll = async () => {
       try {
-        const data = await getTrending();
-        setMovies(data);
+        const Trendingdata = await getTrending();
+        setTrending(Trendingdata);
+        const Toprateddata = await getTopRated();
+        setToprated(Toprateddata);
+        const Upcomingdata = await getUpcoming();
+        setUpcoming(Upcomingdata);
       } catch (err) {
-        setError("Failed to load movies");
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTrending();
+    fetchAll();
   }, []);
 
   return (
-    <div>
+    <div className="">
       <h1>🎬 Movie Browser</h1>
-      {movies.length > 0 && <Hero movie={movies[0]} />}
-      <p>Trending This Week</p>
+      {trending.length > 0 && <Hero movie={trending[0]} />}
 
       {loading && <p>Loading Movies...</p>}
 
       {error && <p>{error}</p>}
 
-      {!loading && !error && (
+      <div className="flex flex-col ">
+        <p>Trending This Week</p>
         <div className="flex">
-          {movies.map((movie) => (
+          {trending.map((movie) => (
             <div key={movie.id}>
               <MovieCard movie={movie} />
             </div>
           ))}
         </div>
-      )}
+      </div>
+      <div className="flex flex-col ">
+        <p>Top Rated Moives</p>
+        <div className="flex">
+          {toprated.map((movie) => (
+            <div key={movie.id}>
+              <MovieCard movie={movie} />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex flex-col ">
+        <p>Upcoming</p>
+        <div className="flex">
+          {upcoming.map((movie) => (
+            <div key={movie.id}>
+              <MovieCard movie={movie} />
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
