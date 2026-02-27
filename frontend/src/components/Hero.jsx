@@ -12,10 +12,22 @@ function Hero({ movie }) {
   const rating = movie.vote_average.toFixed(1);
 
   return (
-    <div className="relative w-full h-125 overflow-hidden rounded-2xl">
-      <img src={`${backdrop}`} className="absolute w-full h-full "></img>
-      <div className="absolute  bottom-0 left-0 flex flex-col gap-3 p-8">
-        <div className="flex items-center gap-3 flex-wrap ">
+    <div className="relative w-full h-120 overflow-hidden ">
+      {backdrop && (
+        <img
+          src={backdrop}
+          alt={movie.title}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      )}
+      <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-black/10" />
+      <div className="absolute top-0 left-0 right-0 flex items-center px-5 py-3">
+        <span className="text-white font-extrabold text-lg drop-shadow">
+          🎬 Movie<span className="text-red-500">Browser</span>
+        </span>
+      </div>
+      <div className="absolute  bottom-0 left-0 flex flex-col gap-2.5 p-7">
+        <div className="flex items-center gap-2.5  ">
           <span className="bg-red-600 text-white text-xs  font-bold uppercase px-2.5 py-1 rounded">
             {" "}
             🔥Trending
@@ -32,7 +44,7 @@ function Hero({ movie }) {
         <div className="flex gap-3 mt-2">
           <button
             onClick={() => navigate(`/movie/${movie.id}`)}
-            className="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all hover:-translate-y-0.5"
+            className="mt-1 self-start bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
           >
             View Details
           </button>

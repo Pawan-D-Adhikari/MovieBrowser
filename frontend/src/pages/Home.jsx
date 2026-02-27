@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getTrending, getTopRated, getUpcoming, getGenre } from "../api/movie";
 import MovieCard from "../components/MovieCard";
 import Hero from "../components/Hero";
-import { generatePath } from "react-router-dom";
 
 function Home() {
   const [trending, setTrending] = useState([]);
@@ -34,17 +33,16 @@ function Home() {
   }, []);
 
   return (
-    <div className="">
-      <h1>🎬 Movie Browser</h1>
+    <div className="overflow-x-hidden overflow-y-auto w-full">
       {trending.length > 0 && <Hero movie={trending[0]} />}
 
       {loading && <p>Loading Movies...</p>}
 
       {error && <p>{error}</p>}
 
-      <div className="flex flex-col ">
-        <p>Trending This Week</p>
-        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="flex flex-col px-4 py-3 min-w-0 w-full">
+        <p className="text-white font-bold text-lg mb-2">Trending This Week</p>
+        <div className="flex overflow-x-auto overflow-y-hidden gap-3 pb-2 scrollbar-hide">
           {trending.map((movie) => (
             <div key={movie.id} className="shrink-0">
               <MovieCard movie={movie} genres={genres} />
@@ -52,9 +50,9 @@ function Home() {
           ))}
         </div>
       </div>
-      <div className="flex flex-col ">
-        <p>Top Rated Moives</p>
-        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide mt-1 mb-1">
+      <div className="flex flex-col px-4 py-3 min-w-0 w-full">
+        <p className="text-white font-bold text-lg mb-2">Top Rated Moives</p>
+        <div className="flex overflow-x-auto overflow-y-hidden gap-3 pb-2 scrollbar-hide">
           {toprated.map((movie) => (
             <div key={movie.id} className="shrink-0">
               <MovieCard movie={movie} genres={genres} />
@@ -62,9 +60,9 @@ function Home() {
           ))}
         </div>
       </div>
-      <div className="flex flex-col ">
-        <p>Upcoming</p>
-        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="flex flex-col px-4 py-3 min-w-0 w-full">
+        <p className="text-white font-bold text-lg mb-2">Upcoming</p>
+        <div className="flex overflow-x-auto overflow-y-hidden gap-3 pb-2 scrollbar-hide">
           {upcoming.map((movie) => (
             <div key={movie.id} className="shrink-0">
               <MovieCard movie={movie} genres={genres} />
