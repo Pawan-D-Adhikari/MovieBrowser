@@ -16,3 +16,7 @@ export const getUpcoming = async () => {
   const res = await axios.get(`${BASE}/upcoming`);
   return res.data;
 };
+export const getGenre = async () => {
+  const res = await axios.get(`${BASE}/genre`);
+  return res.data.genres;
+};

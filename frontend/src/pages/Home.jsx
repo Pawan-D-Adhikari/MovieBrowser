@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { getTrending, getTopRated, getUpcoming } from "../api/movie";
+import { getTrending, getTopRated, getUpcoming, getGenre } from "../api/movie";
 import MovieCard from "../components/MovieCard";
 import Hero from "../components/Hero";
+import { generatePath } from "react-router-dom";
 
 function Home() {
   const [trending, setTrending] = useState([]);
   const [toprated, setToprated] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
+  const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,6 +21,8 @@ function Home() {
         setToprated(Toprateddata);
         const Upcomingdata = await getUpcoming();
         setUpcoming(Upcomingdata);
+        const GenreData = await getGenre();
+        setGenres(GenreData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -43,7 +47,7 @@ function Home() {
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
           {trending.map((movie) => (
             <div key={movie.id} className="shrink-0">
-              <MovieCard movie={movie} />
+              <MovieCard movie={movie} genres={genres} />
             </div>
           ))}
         </div>
@@ -53,7 +57,7 @@ function Home() {
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide mt-1 mb-1">
           {toprated.map((movie) => (
             <div key={movie.id} className="shrink-0">
-              <MovieCard movie={movie} />
+              <MovieCard movie={movie} genres={genres} />
             </div>
           ))}
         </div>
@@ -63,7 +67,7 @@ function Home() {
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
           {upcoming.map((movie) => (
             <div key={movie.id} className="shrink-0">
-              <MovieCard movie={movie} />
+              <MovieCard movie={movie} genres={genres} />
             </div>
           ))}
         </div>

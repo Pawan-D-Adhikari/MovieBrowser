@@ -37,4 +37,16 @@ router.get("/upcoming", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch upcoming movies" });
   }
 });
+
+router.get("/genre", async (req, res) => {
+  try {
+    const response = await axios.get(
+      `${TMDB_BASE}/genre/movie/list?api_key=${KEY}&language=en-US`,
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch genres" });
+  }
+});
 module.exports = router;

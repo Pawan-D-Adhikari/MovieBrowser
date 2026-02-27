@@ -2,8 +2,12 @@ import { useNavigate } from "react-router-dom";
 
 const IMG_BASE = "https://image.tmdb.org/t/p/w500";
 
-function MovieCard({ movie }) {
+function MovieCard({ movie, genres }) {
   const navigate = useNavigate();
+  const movieGenres = (movie.genre_ids || [])
+    .slice(0, 2)
+    .map((id) => genres.find((g) => g.id === id)?.name)
+    .filter(Boolean);
 
   const poster = movie.poster_path
     ? `${IMG_BASE}${movie.poster_path}`
@@ -32,6 +36,16 @@ function MovieCard({ movie }) {
           {movie.title}
         </h3>
         <p className="text-zinc-400 text-xs mt-1">{year}</p>
+        <div className="flex flex-wrap gap-1 mt-2">
+          {movieGenres.map((genre) => (
+            <span
+              key={genre}
+              className="bg-zinc-700 text-zinc-300 text-[10px] px-2 py-0.5 rounded-full"
+            >
+              {genre}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );
