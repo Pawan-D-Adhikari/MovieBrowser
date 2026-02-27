@@ -49,4 +49,28 @@ router.get("/genre", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch genres" });
   }
 });
+router.get("/search", async (req, res) => {
+  console.log("Search route hit");
+  const { query, page = 1 } = req.query;
+
+  if (!query) {
+    return res.status(400).json({ error: "Query parameter is required" });
+  }
+
+  try {
+    const response = await axios.get(`${TMDB_BASE}/search/movie`, {
+      params: {
+        api_key: KEY,
+        query,
+        page,
+      },
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Failed to fetch movies" });
+  }
+});
+
 module.exports = router;
