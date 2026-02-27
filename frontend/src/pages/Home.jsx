@@ -40,9 +40,9 @@ function Home() {
 
       <div className="flex flex-col ">
         <p>Trending This Week</p>
-        <div className="flex">
+        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
           {trending.map((movie) => (
-            <div key={movie.id}>
+            <div key={movie.id} className="shrink-0">
               <MovieCard movie={movie} />
             </div>
           ))}
@@ -50,9 +50,9 @@ function Home() {
       </div>
       <div className="flex flex-col ">
         <p>Top Rated Moives</p>
-        <div className="flex">
+        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide mt-1 mb-1">
           {toprated.map((movie) => (
-            <div key={movie.id}>
+            <div key={movie.id} className="shrink-0">
               <MovieCard movie={movie} />
             </div>
           ))}
@@ -60,9 +60,9 @@ function Home() {
       </div>
       <div className="flex flex-col ">
         <p>Upcoming</p>
-        <div className="flex">
+        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
           {upcoming.map((movie) => (
-            <div key={movie.id}>
+            <div key={movie.id} className="shrink-0">
               <MovieCard movie={movie} />
             </div>
           ))}
