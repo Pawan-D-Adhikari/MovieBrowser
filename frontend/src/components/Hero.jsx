@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 const IMG_BASE = "https://image.tmdb.org/t/p/original";
 
 function Hero({ movie }) {
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+
   if (!movie) return null;
   const backdrop = movie.backdrop_path
     ? `${IMG_BASE}${movie.backdrop_path}`
@@ -10,6 +13,12 @@ function Hero({ movie }) {
 
   const year = movie.release_date.split("-")[0];
   const rating = movie.vote_average.toFixed(1);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!search.trim()) return;
+    navigate(`/search?q=${encodeURIComponent(search.trim())}`);
+  };
 
   return (
     <div className="relative w-full h-120 overflow-hidden ">
@@ -25,6 +34,22 @@ function Hero({ movie }) {
         <span className="text-white font-extrabold text-lg drop-shadow">
           🎬 Movie<span className="text-red-500">Browser</span>
         </span>
+        <form onSubmit={handleSearch} className="flex items-center gap-2">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search movies..."
+            className="bg-white/10 text-white placeholder-white/50 text-sm px-4 py-2 rounded-lg border border-white/20 focus:border-white/50 outline-none w-64 transition-all"
+          />
+          <button
+            type="submit"
+            className="bg-red-500 hover:bg-red-400 text-white text-sm font-bold px-4 py-2 rounded-lg transition-colors cursor-pointer"
+            style={{ backgroundColor: search.trim() ? undefined : "#6b7280" }}
+          >
+            Search
+          </button>
+        </form>
       </div>
       <div className="absolute  bottom-0 left-0 flex flex-col gap-2.5 p-7">
         <div className="flex items-center gap-2.5  ">
