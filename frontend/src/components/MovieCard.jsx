@@ -15,16 +15,20 @@ function MovieCard({ movie }) {
   return (
     <div
       onClick={() => navigate(`/movie/${movie.id}`)}
-      className="bg-zinc-900 rounded-xl overflow-hidden cursor-pointer hover:scale-105 hover:ring-2 hover:ring-yellow-400 transition-all duration-200"
+      className="bg-zinc-900 rounded-xl w-40 overflow-hidden cursor-pointer hover:scale-105 hover:ring-2 hover:ring-yellow-400 transition-all duration-200"
     >
-      <div className="relative">
-        <img src={poster} alt={movie.title} className="w-full object-cover" />
+      <div className="relative  h-64">
+        <img
+          src={poster}
+          alt={movie.title}
+          className="w-full h-full object-cover"
+        />
         <span className="absolute top-2 right-2 bg-black/70 text-yellow-400 text-xs font-bold px-2 py-1 rounded-md">
           ⭐ {rating}
         </span>
       </div>
       <div className="p-3">
-        <h3 className="text-white text-sm font-semibold truncate">
+        <h3 className="text-white text-sm font-semibold truncate ">
           {movie.title}
         </h3>
         <p className="text-zinc-400 text-xs mt-1">{year}</p>
