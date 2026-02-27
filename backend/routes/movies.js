@@ -5,7 +5,6 @@ const router = express.Router();
 const TMDB_BASE = "https://api.themoviedb.org/3";
 const KEY = process.env.TMDB_API_KEY;
 
-// Test route
 router.get("/trending", async (req, res) => {
   try {
     const response = await axios.get(
@@ -17,4 +16,25 @@ router.get("/trending", async (req, res) => {
   }
 });
 
+router.get("/top_rated", async (req, res) => {
+  try {
+    const response = await axios.get(
+      `${TMDB_BASE}/movie/top_rated?api_key=${KEY}`,
+    );
+    res.json(response.data.results);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch top rated movies" });
+  }
+});
+
+router.get("/upcoming", async (req, res) => {
+  try {
+    const response = await axios.get(
+      `${TMDB_BASE}/movie/upcoming?api_key=${KEY}`,
+    );
+    res.json(response.data.results);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch upcoming movies" });
+  }
+});
 module.exports = router;
