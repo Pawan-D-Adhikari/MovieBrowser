@@ -116,4 +116,57 @@ router.get("/similar", async (req, res) => {
   }
 });
 
+router.get("/filter", async (req, res) => {
+  const {
+    genres,
+    year,
+    minRating,
+    maxRating,
+    sort = "popular",
+    page = 1,
+  } = req.query;
+
+  let genreString;
+
+  if (Array.isArray(genres)) {
+    genreString = genres.join(",");
+  } else {
+    genreString = genres;
+  }
+
+  let sortBy;
+
+  switch (sort) {
+    case "top_rated":
+      sortBy = "vote_average.desc";
+      break;
+    case "newest":
+      sortBy = "primary_release_date.desc";
+      break;
+    case "oldest":
+      sortBy = "primary_release_date.asc";
+      break;
+    default:
+      sortBy = "popularity.desc";
+  }
+
+  try {
+    const response = await axios.get(`${TMDB_BASE}/discover/movie`, {
+      params: {
+        api_key: KEY,
+        with_genres: genreString || undefined,
+        primary_release_year: year || undefined,
+        "vote_average.gte": minRating || undefined,
+        "vote_average.lte": maxRating || undefined,
+        sort_by: sortBy,
+        page,
+      },
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+    res.status(500).json({ error: "Failed to fetch movies" });
+  }
+});
+
 module.exports = router;
