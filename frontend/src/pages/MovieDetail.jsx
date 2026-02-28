@@ -8,19 +8,6 @@ function MovieDetail() {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [genres, setGenres] = useState([]);
-
-  useEffect(() => {
-    const fetchGenres = async () => {
-      try {
-        const GenreData = await getGenre();
-        setGenres(GenreData);
-      } catch (err) {
-        console.error("Failed to fetch genres");
-      }
-    };
-    fetchGenres();
-  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -38,16 +25,102 @@ function MovieDetail() {
     };
     fetch();
   }, [id]);
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center text-gray-400">
+        Loading...
+      </div>
+    );
   if (error) return <p>{error}</p>;
-  if (!results) return <p>No movie found.</p>;
+  if (!results)
+    return (
+      <div className="min-h-screen bg-gray-950 flex items-center justify-center text-red-400">
+        {error || "Movie not found."}
+      </div>
+    );
 
+  const cast = results.credits?.cast?.slice(0, 10) || [];
+  const genres = results.genres?.map((g) => g.name) || [];
+  const backdropUrl = results.backdrop_path
+    ? `https://image.tmdb.org/t/p/original${results.backdrop_path}`
+    : null;
+  const posterUrl = results.poster_path
+    ? `https://image.tmdb.org/t/p/w500${results.poster_path}`
+    : null;
   return (
-    <div>
+    <div className="min-h-screen bg-gray-950 text-white">
       <Navbar />
-      <pre className="text-white text-xs p-4">
-        {JSON.stringify(results, null, 2)}
-      </pre>
+      <div className="relative h-80 overflow-hidden">
+        {backdropUrl && (
+          <img
+            src={backdropUrl}
+            className="w-full h-full object-cover object-top opacity-40"
+          />
+        )}
+        <div className="absolute inset-0 bg-linear-to-t from-gray-950 to-transparent" />
+      </div>
+      <div className="max-w-2xl mx-auto px-4 -mt-20 pb-16 relative">
+        <div className="flex gap-5 items-end">
+          {posterUrl && (
+            <img
+              src={posterUrl}
+              alt={results.title}
+              className="w-50 rounded-lg shadow-2xl shrink-0"
+            />
+          )}
+          <div className="pb-1">
+            <h1 className="text-2xl font-bold leading-tight">
+              {results.title}
+            </h1>
+            {results.tagline && (
+              <p className="text-sm text-gray-400 italic mt-1">
+                {results.tagline}
+              </p>
+            )}
+            <div className="flex flex-wrap gap-2 mt-2">
+              {genres.map((g) => (
+                <span
+                  key={g}
+                  className="text-xs bg-gray-800 text-gray-300 px-2 py-0.5 rounded"
+                >
+                  {g}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 mt-5 text-sm text-gray-400">
+          {results.vote_average != null && (
+            <>
+              <span className="flex items-center gap-1">
+                <span className="text-yellow-400">★</span>
+                <span className="font-semibold text-white">
+                  {results.vote_average.toFixed(1)}
+                </span>
+                <span>/10</span>
+              </span>
+              <span>·</span>
+            </>
+          )}
+          {results.release_date && (
+            <>
+              <span>{new Date(results.release_date).getFullYear()}</span>
+              <span>·</span>
+            </>
+          )}
+          {results.runtime > 0 && (
+            <span>
+              {Math.floor(results.runtime / 60)}h {results.runtime % 60}m
+            </span>
+          )}
+        </div>
+        {results.overview && (
+          <p className="mt-5 text-sm text-gray-300 leading-relaxed">
+            {results.overview}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

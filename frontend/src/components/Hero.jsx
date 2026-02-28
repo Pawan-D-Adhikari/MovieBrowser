@@ -42,7 +42,7 @@ function Hero({ movie }) {
         </p>
         <div className="flex gap-3 mt-2">
           <div
-            onClick={() => navigate(`/movie/${movie.id}`)}
+            onClick={() => navigate(`/movie?q=${encodeURIComponent(movie.id)}`)}
             className="inline-block bg-red-500  active:bg-red-600 text-white hover:text-white text-sm font-bold px-6 py-2.5 rounded-lg border-2 border-transparent hover:bg-black hover:border-zinc-400 shadow-lg transition-all cursor-pointer select-none mt-1"
           >
             View Details
