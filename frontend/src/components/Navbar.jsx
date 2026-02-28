@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -11,6 +12,18 @@ function Navbar() {
     navigate(`/search?q=${encodeURIComponent(search.trim())}`);
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [search]);
+  useEffect(() => {
+    if (!debouncedSearch.trim()) return;
+    navigate(`/search?q=${encodeURIComponent(debouncedSearch.trim())}`);
+  }, [debouncedSearch, navigate]);
   return (
     <div className="flex items-center justify-between px-6 py-4 w-full bg-zinc-900/95 backdrop-blur-sm  border-zinc-700/50">
       <span
@@ -28,14 +41,6 @@ function Navbar() {
           placeholder="🔍  Search movies..."
           className="bg-zinc-800 text-white placeholder-zinc-500 text-sm px-4 py-2.5 rounded-xl border border-zinc-700 focus:border-red-500 focus:ring-1 focus:ring-red-500/40 outline-none w-72 transition-all duration-200"
         />
-
-        <button
-          type="submit"
-          disabled={!search.trim()}
-          className=" disabled:bg-zinc-700 disabled:text-zinc-500 disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-red-400 active:bg-red-600 transition-all duration-200 cursor-pointer"
-        >
-          Search
-        </button>
       </form>
     </div>
   );
