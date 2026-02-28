@@ -93,5 +93,28 @@ router.get("/movie", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch movies detail" });
   }
 });
+router.get("/similar", async (req, res) => {
+  const { id } = req.query;
+
+  if (!id) {
+    return res.status(400).json({ error: "id parameter is required" });
+  }
+
+  try {
+    const response = await axios.get(`${TMDB_BASE}/movie/${id}/similar`, {
+      params: {
+        api_key: KEY,
+        language: "en-US",
+        page: 1,
+      },
+    });
+
+    console.log(JSON.stringify(response.data, null, 2));
+    res.json(response.data.results);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Failed to fetch similar movies" });
+  }
+});
 
 module.exports = router;

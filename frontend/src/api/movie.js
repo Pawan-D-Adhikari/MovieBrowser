@@ -45,3 +45,14 @@ export const getMovieDetail = async (id) => {
     throw error;
   }
 };
+export const getSimilarMovies = async (id) => {
+  try {
+    const res = await axios.get(`${BASE}/similar`, {
+      params: { id },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};

@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { getMovieDetail, getGenre } from "../api/movie";
+import { getMovieDetail, getSimilarMovies, getGenre } from "../api/movie";
 import Navbar from "../components/Navbar";
 import ActorCard from "../components/ActorCard";
 import { Carousel } from "@mantine/carousel";
+import MovieCard from "../components/MovieCard";
 function MovieDetail() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("q");
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [similar, setSimilar] = useState([]);
+  const [similargenres, setSimilarGenres] = useState([]);
 
   useEffect(() => {
     if (!id) return;
@@ -19,6 +22,11 @@ function MovieDetail() {
       try {
         const data = await getMovieDetail(id);
         setResults(data);
+        const similarmovie = await getSimilarMovies(id);
+        setSimilar(similarmovie);
+        const GenreData = await getGenre();
+        console.log("GenreData:", GenreData);
+        setSimilarGenres(GenreData);
       } catch (err) {
         setError("Failed to fetch results.");
       } finally {
@@ -137,6 +145,14 @@ function MovieDetail() {
             </Carousel.Slide>
           ))}
         </Carousel>
+      </div>
+      <h2 className="text-base font-semibold mb-3 px-4  text-gray-300">
+        Similar Movies
+      </h2>
+      <div className="flex flex-wrap gap-4 ">
+        {similar.map((movie) => (
+          <MovieCard key={movie.id} movie={movie} genres={similargenres} />
+        ))}
       </div>
     </div>
   );

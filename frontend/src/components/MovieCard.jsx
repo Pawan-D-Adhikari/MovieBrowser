@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 const IMG_BASE = "https://image.tmdb.org/t/p/w500";
 
-function MovieCard({ movie, genres }) {
+function MovieCard({ movie, genres = [] }) {
   const navigate = useNavigate();
   const movieGenres = (movie.genre_ids || [])
     .slice(0, 2)
