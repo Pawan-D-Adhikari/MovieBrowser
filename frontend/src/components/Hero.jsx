@@ -14,7 +14,7 @@ function Hero({ movie }) {
   const rating = movie.vote_average.toFixed(1);
 
   return (
-    <div className="relative w-full h-120 overflow-hidden ">
+    <div className="relative w-full h-120 overflow-hidden  ">
       {backdrop && (
         <img
           src={backdrop}
