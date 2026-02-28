@@ -25,7 +25,6 @@ function MovieDetail() {
         const similarmovie = await getSimilarMovies(id);
         setSimilar(similarmovie);
         const GenreData = await getGenre();
-        console.log("GenreData:", GenreData);
         setSimilarGenres(GenreData);
       } catch (err) {
         setError("Failed to fetch results.");

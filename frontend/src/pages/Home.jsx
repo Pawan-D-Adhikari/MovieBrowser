@@ -42,74 +42,81 @@ function Home() {
       {loading && <p>Loading Movies...</p>}
 
       {error && <p>{error}</p>}
+      {trending.length > 0 && (
+        <div className="flex flex-col px-4 py-3 min-w-0 w-full ">
+          <p className="text-white font-bold text-lg mb-2">
+            Trending This Week
+          </p>
 
-      <div className="flex flex-col px-4 py-3 min-w-0 w-full ">
-        <p className="text-white font-bold text-lg mb-2">Trending This Week</p>
-
-        <Carousel
-          slideSize="10%"
-          breakpoints={[
-            { maxWidth: 1536, slideSize: "12%" },
-            { maxWidth: 1280, slideSize: "15%" },
-            { maxWidth: 1024, slideSize: "20%" },
-            { maxWidth: 768, slideSize: "30%" },
-            { maxWidth: 480, slideSize: "50%" },
-          ]}
-          slideGap="md"
-          align="start"
-          loop
-        >
-          {trending.map((movie) => (
-            <Carousel.Slide key={movie.id}>
-              <MovieCard movie={movie} genres={genres} />
-            </Carousel.Slide>
-          ))}
-        </Carousel>
-      </div>
-      <div className="flex flex-col px-4 py-3 min-w-0 w-full">
-        <p className="text-white font-bold text-lg mb-2">Top Rated Moives</p>
-        <Carousel
-          slideSize="10%"
-          breakpoints={[
-            { maxWidth: 1536, slideSize: "12%" },
-            { maxWidth: 1280, slideSize: "15%" },
-            { maxWidth: 1024, slideSize: "20%" },
-            { maxWidth: 768, slideSize: "30%" },
-            { maxWidth: 480, slideSize: "50%" },
-          ]}
-          slideGap="md"
-          align="start"
-          loop
-        >
-          {toprated.map((movie) => (
-            <Carousel.Slide key={movie.id}>
-              <MovieCard movie={movie} genres={genres} />
-            </Carousel.Slide>
-          ))}
-        </Carousel>
-      </div>
-      <div className="flex flex-col px-4 py-3 min-w-0 w-full">
-        <p className="text-white font-bold text-lg mb-2">Upcoming</p>
-        <Carousel
-          slideSize="10%"
-          breakpoints={[
-            { maxWidth: 1536, slideSize: "12%" },
-            { maxWidth: 1280, slideSize: "15%" },
-            { maxWidth: 1024, slideSize: "20%" },
-            { maxWidth: 768, slideSize: "30%" },
-            { maxWidth: 480, slideSize: "50%" },
-          ]}
-          slideGap="md"
-          align="start"
-          loop
-        >
-          {upcoming.map((movie) => (
-            <Carousel.Slide key={movie.id}>
-              <MovieCard movie={movie} genres={genres} />
-            </Carousel.Slide>
-          ))}
-        </Carousel>
-      </div>
+          <Carousel
+            slideSize="10%"
+            breakpoints={[
+              { maxWidth: 1536, slideSize: "12%" },
+              { maxWidth: 1280, slideSize: "15%" },
+              { maxWidth: 1024, slideSize: "20%" },
+              { maxWidth: 768, slideSize: "30%" },
+              { maxWidth: 480, slideSize: "50%" },
+            ]}
+            slideGap="md"
+            align="start"
+            loop
+          >
+            {trending.map((movie) => (
+              <Carousel.Slide key={movie.id}>
+                <MovieCard movie={movie} genres={genres} />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        </div>
+      )}
+      {toprated.length > 0 && (
+        <div className="flex flex-col px-4 py-3 min-w-0 w-full">
+          <p className="text-white font-bold text-lg mb-2">Top Rated Moives</p>
+          <Carousel
+            slideSize="10%"
+            breakpoints={[
+              { maxWidth: 1536, slideSize: "12%" },
+              { maxWidth: 1280, slideSize: "15%" },
+              { maxWidth: 1024, slideSize: "20%" },
+              { maxWidth: 768, slideSize: "30%" },
+              { maxWidth: 480, slideSize: "50%" },
+            ]}
+            slideGap="md"
+            align="start"
+            loop
+          >
+            {toprated.map((movie) => (
+              <Carousel.Slide key={movie.id}>
+                <MovieCard movie={movie} genres={genres} />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        </div>
+      )}
+      {upcoming.length > 0 && (
+        <div className="flex flex-col px-4 py-3 min-w-0 w-full">
+          <p className="text-white font-bold text-lg mb-2">Upcoming</p>
+          <Carousel
+            slideSize="10%"
+            breakpoints={[
+              { maxWidth: 1536, slideSize: "12%" },
+              { maxWidth: 1280, slideSize: "15%" },
+              { maxWidth: 1024, slideSize: "20%" },
+              { maxWidth: 768, slideSize: "30%" },
+              { maxWidth: 480, slideSize: "50%" },
+            ]}
+            slideGap="md"
+            align="start"
+            loop
+          >
+            {upcoming.map((movie) => (
+              <Carousel.Slide key={movie.id}>
+                <MovieCard movie={movie} genres={genres} />
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        </div>
+      )}
     </div>
   );
 }

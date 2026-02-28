@@ -86,7 +86,7 @@ router.get("/movie", async (req, res) => {
         append_to_response: "credits",
       },
     });
-    console.log(JSON.stringify(response.data, null, 2));
+
     res.json(response.data);
   } catch (error) {
     console.error(error.message);
@@ -109,7 +109,6 @@ router.get("/similar", async (req, res) => {
       },
     });
 
-    console.log(JSON.stringify(response.data, null, 2));
     res.json(response.data.results);
   } catch (error) {
     console.error(error.message);
