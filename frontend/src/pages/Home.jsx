@@ -39,7 +39,11 @@ function Home() {
       <Navbar />
       {trending.length > 0 && <Hero movie={trending[0]} />}
 
-      {loading && <p>Loading Movies...</p>}
+      {loading && (
+        <div className="min-h-screen bg-gray-950 flex items-center justify-center text-gray-400">
+          Loading...
+        </div>
+      )}
 
       {error && <p>{error}</p>}
       {trending.length > 0 && (
