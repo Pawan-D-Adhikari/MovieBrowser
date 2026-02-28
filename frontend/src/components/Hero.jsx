@@ -22,7 +22,7 @@ function Hero({ movie }) {
           className="absolute inset-0 w-full h-full object-cover"
         />
       )}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/90" />
+      <div className="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-black/90" />
       <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-black/10" />
 
       <div className="absolute  bottom-0 left-0 flex flex-col gap-2.5 p-7">

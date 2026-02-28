@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getMovieDetail, getGenre } from "../api/movie";
 import Navbar from "../components/Navbar";
+import ActorCard from "../components/ActorCard";
+import { Carousel } from "@mantine/carousel";
 function MovieDetail() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("q");
@@ -59,7 +61,7 @@ function MovieDetail() {
         )}
         <div className="absolute inset-0 bg-linear-to-t from-gray-950 to-transparent" />
       </div>
-      <div className="max-w-2xl mx-auto px-4 -mt-20 pb-16 relative">
+      <div className=" px-4 -mt-20 pb-16 relative">
         <div className="flex gap-5 items-end">
           {posterUrl && (
             <img
@@ -120,6 +122,21 @@ function MovieDetail() {
             {results.overview}
           </p>
         )}
+      </div>
+      <div className="px-4 pb-16">
+        <h2 className="text-base font-semibold mb-3 text-gray-300">Cast</h2>
+        <Carousel
+          slideSize={{ base: "25%", sm: "20%", md: "16.666%", lg: "12.5%" }}
+          slideGap="md"
+          align="start"
+          loop
+        >
+          {cast.map((member) => (
+            <Carousel.Slide key={member.id}>
+              <ActorCard cast={member} />
+            </Carousel.Slide>
+          ))}
+        </Carousel>
       </div>
     </div>
   );
