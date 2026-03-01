@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Filter from "./Filter";
+import Filter from "./FilterCard";
 
 function Navbar() {
   const navigate = useNavigate();

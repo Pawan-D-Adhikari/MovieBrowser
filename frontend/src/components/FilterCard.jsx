@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { getGenre } from "../api/movie";
+import { useNavigate } from "react-router-dom";
 
 const years = Array.from({ length: 100 }, (_, i) => 2026 - i);
 
-function Filter() {
+function FilterCard() {
   const [genres, setGenres] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [year, setYear] = useState("");
@@ -11,7 +12,23 @@ function Filter() {
   const [maxRating, setMaxRating] = useState(10);
   const [sort, setSort] = useState("popular");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
+  const handleApply = () => {
+    const params = new URLSearchParams();
+
+    params.set("sort", sort);
+
+    if (year) params.set("year", year);
+
+    if (minRating !== 0) params.set("minRating", minRating.toString());
+
+    if (maxRating !== 10) params.set("maxRating", maxRating.toString());
+
+    if (selectedIds.length > 0) params.set("genres", selectedIds.join(","));
+
+    navigate(`/filter?${params.toString()}`);
+  };
   useEffect(() => {
     const fetchGenres = async () => {
       try {
@@ -151,9 +168,15 @@ function Filter() {
             })}
           </div>
         </div>
+        <div
+          onClick={handleApply}
+          className=" flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold  cursor-pointer py-2 rounded-lg transition-colors"
+        >
+          Apply Filters
+        </div>
       </div>
     </div>
   );
 }
 
-export default Filter;
+export default FilterCard;

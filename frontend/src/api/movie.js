@@ -56,3 +56,22 @@ export const getSimilarMovies = async (id) => {
     throw error;
   }
 };
+
+export const getFilteredMovies = async (filters) => {
+  try {
+    const res = await axios.get(`${BASE}/filter`, {
+      params: {
+        sort: filters.sort,
+        year: filters.year,
+        minRating: filters.minRating,
+        maxRating: filters.maxRating,
+        genres: filters.genres,
+      },
+    });
+
+    return res.data.results;
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
