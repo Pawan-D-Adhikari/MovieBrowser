@@ -75,3 +75,13 @@ export const getFilteredMovies = async (filters) => {
     throw error;
   }
 };
+export const getPopular = async (page = 1) => {
+  try {
+    const res = await fetch(`${BASE}/popular?page=${page}`);
+    const data = await res.json();
+    return data || [];
+  } catch (err) {
+    console.error("Failed to fetch popular movies:", err);
+    return [];
+  }
+};

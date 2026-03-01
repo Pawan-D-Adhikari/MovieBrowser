@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
-import { getTrending, getTopRated, getUpcoming, getGenre } from "../api/movie";
+import {
+  getTrending,
+  getTopRated,
+  getUpcoming,
+  getGenre,
+  getPopular,
+} from "../api/movie";
 import MovieCard from "../components/MovieCard";
 import Hero from "../components/Hero";
 import { Carousel } from "@mantine/carousel";
 import Navbar from "../components/Navbar";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 function Home() {
   const [trending, setTrending] = useState([]);
@@ -12,6 +19,10 @@ function Home() {
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [otherMovies, setOtherMovies] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -24,6 +35,8 @@ function Home() {
         setUpcoming(Upcomingdata);
         const GenreData = await getGenre();
         setGenres(GenreData);
+        const PopularData = await getPopular(1);
+        setOtherMovies(PopularData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -33,7 +46,18 @@ function Home() {
 
     fetchAll();
   }, []);
+  const fetchMoreMovies = async () => {
+    const nextPage = page + 1;
+    const newMovies = await getPopular(nextPage);
 
+    if (newMovies.length === 0) {
+      setHasMore(false);
+      return;
+    }
+
+    setOtherMovies((prev) => [...prev, ...newMovies]);
+    setPage(nextPage);
+  };
   return (
     <div className="overflow-x-hidden overflow-y-auto w-full">
       <Navbar />
@@ -119,6 +143,36 @@ function Home() {
               </Carousel.Slide>
             ))}
           </Carousel>
+        </div>
+      )}
+      {otherMovies?.length > 0 && (
+        <div className="flex flex-col px-4 py-3 min-w-0 w-full">
+          <p className="text-white font-bold text-lg mb-4">Other Movies</p>
+
+          <InfiniteScroll
+            dataLength={otherMovies.length}
+            next={fetchMoreMovies}
+            hasMore={hasMore}
+            loader={
+              <p className="text-gray-400 text-center mt-4">Loading more...</p>
+            }
+            endMessage={
+              <p className="text-gray-500 text-center mt-4">
+                No more movies to show
+              </p>
+            }
+          >
+            <div className="flex flex-wrap gap-1">
+              {otherMovies.map((movie) => (
+                <div
+                  key={movie.id}
+                  className="w-1/2 sm:w-1/3 md:w-1/5 lg:w-1/7"
+                >
+                  <MovieCard movie={movie} genres={genres} />
+                </div>
+              ))}
+            </div>
+          </InfiniteScroll>
         </div>
       )}
     </div>

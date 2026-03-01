@@ -169,4 +169,21 @@ router.get("/filter", async (req, res) => {
   }
 });
 
+router.get("/popular", async (req, res) => {
+  const page = req.query.page || 1;
+  try {
+    const response = await axios.get(`${TMDB_BASE}/movie/popular`, {
+      params: {
+        api_key: KEY,
+        page: page,
+      },
+    });
+
+    res.json(response.data.results);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: "Failed to fetch popular movies" });
+  }
+});
+
 module.exports = router;
