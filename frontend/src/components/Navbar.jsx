@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Filter from "./FilterCard";
 import { useSearchParams } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("q") ?? "");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -12,24 +13,30 @@ function Navbar() {
   const filterRef = useRef(null);
   const filterButtonRef = useRef(null);
   const inputRef = useRef(null);
+  const isSearchPage = location.pathname === "/search";
 
   useEffect(() => {
+    if (!isSearchPage) {
+      setSearch("");
+      return;
+    }
     const urlQuery = searchParams.get("q") ?? "";
     setSearch((prev) => (prev !== urlQuery ? urlQuery : prev));
     if (urlQuery) {
       setTimeout(() => inputRef.current?.focus(), 0);
     }
   }, [searchParams]);
-  useEffect(() => {
-    setSearch(searchParams.get("q") ?? "");
-  }, [searchParams]);
 
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedSearch(search), 500);
     return () => clearTimeout(timeout);
   }, [search]);
-
+  const isMounted = useRef(false);
   useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
     if (!debouncedSearch.trim()) return;
     navigate(`/search?q=${encodeURIComponent(debouncedSearch.trim())}`);
   }, [debouncedSearch, navigate]);
