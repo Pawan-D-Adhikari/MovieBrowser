@@ -1,31 +1,49 @@
 import { useState, useEffect } from "react";
 import { getGenre } from "../api/movie";
 import { useNavigate } from "react-router-dom";
+import { useFilterStore } from "../store/filterStore";
 
 const years = Array.from({ length: 100 }, (_, i) => 2026 - i);
 
 function FilterCard() {
   const [genres, setGenres] = useState([]);
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [year, setYear] = useState("");
-  const [minRating, setMinRating] = useState(0);
-  const [maxRating, setMaxRating] = useState(10);
-  const [sort, setSort] = useState("popular");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const {
+    sort,
+    year,
+    minRating,
+    maxRating,
+    genres: selectedIds,
+    setFilters,
+    resetFilters,
+  } = useFilterStore();
+
+  // Local state for temporary filter values
+  const [localSort, setLocalSort] = useState(sort || "popular");
+  const [localYear, setLocalYear] = useState(year || "");
+  const [localMinRating, setLocalMinRating] = useState(minRating || 0);
+  const [localMaxRating, setLocalMaxRating] = useState(maxRating || 10);
+  const [localSelectedGenres, setLocalSelectedGenres] = useState([
+    ...selectedIds,
+  ]);
   const handleApply = () => {
+    setFilters({
+      sort: localSort,
+      year: localYear,
+      minRating: localMinRating,
+      maxRating: localMaxRating,
+      genres: localSelectedGenres,
+    });
+
     const params = new URLSearchParams();
-
-    params.set("sort", sort);
-
-    if (year) params.set("year", year);
-
-    if (minRating !== 0) params.set("minRating", minRating.toString());
-
-    if (maxRating !== 10) params.set("maxRating", maxRating.toString());
-
-    if (selectedIds.length > 0) params.set("genres", selectedIds.join(","));
+    params.set("sort", localSort);
+    if (localYear) params.set("year", localYear);
+    if (localMinRating !== 0) params.set("minRating", localMinRating);
+    if (localMaxRating !== 10) params.set("maxRating", localMaxRating);
+    if (localSelectedGenres.length > 0)
+      params.set("genres", localSelectedGenres.join(","));
 
     navigate(`/filter?${params.toString()}`);
   };
@@ -35,7 +53,7 @@ function FilterCard() {
         const GenreData = await getGenre();
         setGenres(GenreData);
       } catch (err) {
-        setError(err.message);
+        console.error(err.message);
       } finally {
         setLoading(false);
       }
@@ -44,18 +62,14 @@ function FilterCard() {
     fetchGenres();
   }, []);
 
-  const toggleGenre = (id) =>
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id],
-    );
-
-  const handleReset = () => {
-    setYear("");
-    setMinRating(0);
-    setMaxRating(10);
-    setSort("popular");
-    setSelectedIds([]);
+  const toggleGenre = (id) => {
+    const updated = localSelectedGenres.includes(id)
+      ? localSelectedGenres.filter((g) => g !== id)
+      : [...localSelectedGenres, id]; //
+    setLocalSelectedGenres(updated);
   };
+
+  const handleReset = () => resetFilters();
 
   return (
     <div className="flex flex-col w-100 gap-6 mx-auto px-4 py-3 bg-gray-950 min-h-screen">
@@ -76,8 +90,8 @@ function FilterCard() {
           <label className="text-white font-bold text-sm">Sort By</label>
           <select
             id="movieFilter"
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
+            value={localSort}
+            onChange={(e) => setLocalSort(e.target.value)}
             className="w-full bg-gray-900 border border-gray-700 text-gray-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="popular">Most Popular</option>
@@ -92,8 +106,8 @@ function FilterCard() {
           <label className="text-white font-bold text-sm">Year</label>
           <select
             id="yearFilter"
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
+            value={localYear}
+            onChange={(e) => setLocalYear(e.target.value)}
             className="w-full bg-gray-900 border border-gray-700 text-gray-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Years</option>
@@ -114,13 +128,13 @@ function FilterCard() {
               min={0}
               max={10}
               step={0.5}
-              value={minRating}
-              onChange={(e) => setMinRating(parseFloat(e.target.value))}
+              value={localMinRating}
+              onChange={(e) => setLocalMinRating(parseFloat(e.target.value))}
               onBlur={(e) => {
                 let value = parseFloat(e.target.value);
                 if (isNaN(value) || value < 0) value = 0;
                 if (value > 10) value = 10;
-                setMinRating(value);
+                setLocalMinRating(value);
               }}
               className="w-full bg-gray-900 border border-gray-700 text-gray-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -132,14 +146,14 @@ function FilterCard() {
               min={0}
               max={10}
               step={0.5}
-              value={maxRating}
-              onChange={(e) => setMaxRating(e.target.value)}
+              value={localMaxRating}
+              onChange={(e) => setLocalMaxRating(parseFloat(e.target.value))}
               onBlur={(e) => {
                 let value = parseFloat(e.target.value);
                 if (isNaN(value) || value > 10) value = 10;
                 if (value < 0) value = 0;
                 if (value < minRating) value = minRating;
-                setMaxRating(value);
+                setLocalMaxRating(value);
               }}
               className="w-full bg-gray-900 border border-gray-700 text-gray-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -151,7 +165,7 @@ function FilterCard() {
           <p className="text-white font-bold text-sm">Genres</p>
           <div className="flex flex-wrap gap-2">
             {genres.map((genre) => {
-              const isSelected = selectedIds.includes(genre.id);
+              const isSelected = localSelectedGenres.includes(genre.id);
               return (
                 <div
                   key={genre.id}

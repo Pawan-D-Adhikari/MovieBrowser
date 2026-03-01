@@ -1,12 +1,17 @@
-import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getFilteredMovies, getGenre } from "../api/movie";
 import MovieCard from "../components/MovieCard";
 import Navbar from "../components/Navbar";
+import { useFilterStore } from "../store/filterStore";
 
 function FilterResult() {
-  const [searchParams] = useSearchParams();
-
+  const {
+    sort,
+    year,
+    minRating,
+    maxRating,
+    genres: selectedIds,
+  } = useFilterStore();
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
 
@@ -20,11 +25,11 @@ function FilterResult() {
         setError("");
 
         const filters = {
-          sort: searchParams.get("sort"),
-          year: searchParams.get("year"),
-          minRating: searchParams.get("minRating"),
-          maxRating: searchParams.get("maxRating"),
-          genres: searchParams.get("genres"),
+          sort,
+          year: year || null,
+          minRating: minRating !== 0 ? minRating : null,
+          maxRating: maxRating !== 10 ? maxRating : null,
+          genres: selectedIds.length > 0 ? selectedIds.join(",") : null,
         };
 
         const data = await getFilteredMovies(filters);
@@ -41,7 +46,7 @@ function FilterResult() {
     }
 
     fetchMovies();
-  }, [searchParams]);
+  }, [sort, year, minRating, maxRating, selectedIds.join(",")]);
 
   if (loading) return <div className="text-white p-6">Loading...</div>;
 
@@ -50,7 +55,7 @@ function FilterResult() {
   return (
     <div>
       <Navbar />
-      <div className="bg-gray-950 min-h-screen p-6">
+      <div className="bg-gray-950 min-h-screen p-6 pt-24">
         <h1 className="text-white text-xl font-bold mb-6">Filter Results</h1>
 
         {movies.length === 0 ? (
