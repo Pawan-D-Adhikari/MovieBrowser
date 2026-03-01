@@ -11,6 +11,7 @@ import Hero from "../components/Hero";
 import { Carousel } from "@mantine/carousel";
 import Navbar from "../components/Navbar";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Loader, Center } from "@mantine/core";
 
 function Home() {
   const [trending, setTrending] = useState([]);
@@ -19,6 +20,7 @@ function Home() {
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const [otherMovies, setOtherMovies] = useState([]);
   const [page, setPage] = useState(1);
@@ -47,26 +49,33 @@ function Home() {
     fetchAll();
   }, []);
   const fetchMoreMovies = async () => {
+    setLoadingMore(true);
     const nextPage = page + 1;
-    const newMovies = await getPopular(nextPage);
+    try {
+      const newMovies = await getPopular(nextPage);
 
-    if (newMovies.length === 0) {
-      setHasMore(false);
-      return;
+      if (newMovies.length === 0) {
+        setHasMore(false);
+        return;
+      }
+
+      setOtherMovies((prev) => [...prev, ...newMovies]);
+      setPage(nextPage);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingMore(false);
     }
-
-    setOtherMovies((prev) => [...prev, ...newMovies]);
-    setPage(nextPage);
   };
   return (
-    <div className="overflow-x-hidden overflow-y-auto w-full">
+    <div className="overflow-x-hidden w-full">
       <Navbar />
       {trending.length > 0 && <Hero movie={trending[0]} />}
 
       {loading && (
-        <div className="min-h-screen bg-gray-950 flex items-center justify-center text-gray-400">
-          Loading...
-        </div>
+        <Center className="min-h-screen bg-gray-950">
+          <Loader size="xl" color="blue" variant="dots" />
+        </Center>
       )}
 
       {error && <p>{error}</p>}
@@ -146,33 +155,33 @@ function Home() {
         </div>
       )}
       {otherMovies?.length > 0 && (
-        <div className="flex flex-col px-4 py-3 min-w-0 w-full">
+        <div className=" relative  overflow-x-hidden w-full  ">
           <p className="text-white font-bold text-lg mb-4">Other Movies</p>
-
           <InfiniteScroll
             dataLength={otherMovies.length}
             next={fetchMoreMovies}
             hasMore={hasMore}
-            loader={
-              <p className="text-gray-400 text-center mt-4">Loading more...</p>
-            }
             endMessage={
               <p className="text-gray-500 text-center mt-4">
                 No more movies to show
               </p>
             }
           >
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3 md:gap-4">
-              {otherMovies.map((movie) => (
-                <div
-                  key={movie.id}
-                  className="w-1/2 sm:w-1/3 md:w-1/5 lg:w-1/7"
-                >
-                  <MovieCard movie={movie} genres={genres} />
-                </div>
-              ))}
+            <div className="overflow-hidden">
+              <div className="flex flex-wrap justify-start gap-3 md:gap-4">
+                {otherMovies.map((movie) => (
+                  <div key={movie.id}>
+                    <MovieCard movie={movie} genres={genres} />
+                  </div>
+                ))}
+              </div>
             </div>
           </InfiniteScroll>
+          {loadingMore && (
+            <Center className="mt-4">
+              <Loader size="sm" color="blue" variant="dots" />
+            </Center>
+          )}
         </div>
       )}
     </div>

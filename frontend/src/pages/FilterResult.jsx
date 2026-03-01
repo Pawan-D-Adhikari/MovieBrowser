@@ -3,6 +3,7 @@ import { getFilteredMovies, getGenre } from "../api/movie";
 import MovieCard from "../components/MovieCard";
 import Navbar from "../components/Navbar";
 import { useFilterStore } from "../store/filterStore";
+import { Loader, Center } from "@mantine/core";
 
 function FilterResult() {
   const {
@@ -48,9 +49,20 @@ function FilterResult() {
     fetchMovies();
   }, [sort, year, minRating, maxRating, selectedIds.join(",")]);
 
-  if (loading) return <div className="text-white p-6">Loading...</div>;
+  {
+  }
 
-  if (error) return <div className="text-red-500 p-6">{error}</div>;
+  if (loading) {
+    return (
+      <Center className="min-h-screen bg-gray-950">
+        <Loader size="xl" color="blue" variant="dots" />
+      </Center>
+    );
+  }
+
+  if (error) {
+    return <div className="text-red-500 p-6">{error}</div>;
+  }
 
   return (
     <div>

@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { searchMovies, getGenre } from "../api/movie";
 import MovieCard from "../components/MovieCard";
 import Navbar from "../components/Navbar";
+import { Loader, Center } from "@mantine/core";
 function Search() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q");
@@ -47,7 +48,11 @@ function Search() {
       </div>
       <div className="px-4 py-4">
         <p className="text-lg font-bold mb-3">Results for: "{query}"</p>
-        {loading && <p>Loading...</p>}
+        {loading && (
+          <Center className="min-h-screen bg-gray-950">
+            <Loader size="xl" color="blue" variant="dots" />
+          </Center>
+        )}
         {error && <p className="text-red-400">{error}</p>}
         {!loading && results.length === 0 && <p>No results found.</p>}
         <div className="flex flex-wrap gap-4 ">

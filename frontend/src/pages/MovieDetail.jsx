@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import ActorCard from "../components/ActorCard";
 import { Carousel } from "@mantine/carousel";
 import MovieCard from "../components/MovieCard";
+import { Loader, Center } from "@mantine/core";
 function MovieDetail() {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("q");
@@ -34,12 +35,17 @@ function MovieDetail() {
     };
     fetch();
   }, [id]);
-  if (loading)
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center text-gray-400">
-        Loading...
-      </div>
+      <Center className="min-h-screen bg-gray-950">
+        <Loader size="xl" color="blue" variant="dots" />
+      </Center>
     );
+  }
+
+  if (error) {
+    return <div className="text-red-500 p-6">{error}</div>;
+  }
   if (error) return <p>{error}</p>;
   if (!results)
     return (
