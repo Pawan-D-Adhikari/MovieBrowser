@@ -14,7 +14,13 @@ function Navbar() {
   const filterButtonRef = useRef(null);
   const inputRef = useRef(null);
   const isSearchPage = location.pathname === "/search";
-
+  const handleTitleClick = () => {
+    if (location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate("/");
+    }
+  };
   useEffect(() => {
     if (!isSearchPage) {
       setSearch("");
@@ -61,7 +67,7 @@ function Navbar() {
       <div className="flex items-center justify-between h-full px-6 max-w-screen-2xl mx-auto">
         <span
           className="text-white font-extrabold text-2xl tracking-tight cursor-pointer select-none hover:opacity-75 transition-opacity shrink-0"
-          onClick={() => navigate("/")}
+          onClick={handleTitleClick}
         >
           🎬 Movie<span className="text-red-500">Browser</span>
         </span>
