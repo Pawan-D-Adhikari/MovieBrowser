@@ -1,14 +1,28 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Filter from "./FilterCard";
+import { useSearchParams } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("q") ?? "");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [showFilter, setShowFilter] = useState(false);
   const filterRef = useRef(null);
   const filterButtonRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const urlQuery = searchParams.get("q") ?? "";
+    setSearch((prev) => (prev !== urlQuery ? urlQuery : prev));
+    if (urlQuery) {
+      setTimeout(() => inputRef.current?.focus(), 0);
+    }
+  }, [searchParams]);
+  useEffect(() => {
+    setSearch(searchParams.get("q") ?? "");
+  }, [searchParams]);
 
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedSearch(search), 500);
@@ -48,6 +62,7 @@ function Navbar() {
         <div className="flex items-center gap-3">
           <input
             type="text"
+            ref={inputRef}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="🔍  Search movies..."
