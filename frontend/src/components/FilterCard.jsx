@@ -20,7 +20,6 @@ function FilterCard() {
     resetFilters,
   } = useFilterStore();
 
-  // Local state for temporary filter values
   const [localSort, setLocalSort] = useState(sort || "popular");
   const [localYear, setLocalYear] = useState(year || "");
   const [localMinRating, setLocalMinRating] = useState(minRating || 0);
@@ -72,7 +71,7 @@ function FilterCard() {
   const handleReset = () => resetFilters();
 
   return (
-    <div className="flex flex-col w-100 gap-6 mx-auto px-4 py-3 bg-gray-950 min-h-screen">
+    <div className="flex flex-col w-full gap-6 mx-auto px-4 py-3 bg-gray-950 min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between w-full">
         <p className="text-white font-bold text-lg">Filter</p>

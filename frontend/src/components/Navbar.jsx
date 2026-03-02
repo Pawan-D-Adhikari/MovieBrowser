@@ -112,7 +112,7 @@ function Navbar() {
       {showFilter && (
         <div
           ref={filterRef}
-          className="absolute right-6 top-[calc(100%+6px)] w-96 rounded-2xl shadow-2xl border border-zinc-700/60 overflow-hidden z-50"
+          className="absolute right-0 top-full w-96 max-w-[calc(100vw-1.5rem)] rounded-2xl shadow-2xl border border-zinc-700/60 overflow-hidden z-50"
         >
           <Filter />
         </div>
