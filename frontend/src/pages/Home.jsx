@@ -155,7 +155,7 @@ function Home() {
         </div>
       )}
       {otherMovies?.length > 0 && (
-        <div className=" relative   w-full  ">
+        <div className=" relative w-full px-4 py-3 ">
           {loadingMore && (
             <Center className="mt-4">
               <Loader size="sm" color="blue" variant="dots" />
@@ -173,7 +173,12 @@ function Home() {
               </p>
             }
           >
-            <div className="flex flex-wrap justify-start gap-3 md:gap-4">
+            <div
+              className="grid gap-3 md:gap-4"
+              style={{
+                gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+              }}
+            >
               {otherMovies.map((movie) => (
                 <div key={movie.id}>
                   <MovieCard movie={movie} genres={genres} />

@@ -154,7 +154,11 @@ function MovieDetail() {
       <h2 className="text-base font-semibold mb-3 px-4  text-gray-300">
         Similar Movies
       </h2>
-      <div className="flex flex-wrap gap-4 ">
+
+      <div
+        className="grid gap-4 px-4"
+        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))" }}
+      >
         {similar.map((movie) => (
           <MovieCard key={movie.id} movie={movie} genres={similargenres} />
         ))}
