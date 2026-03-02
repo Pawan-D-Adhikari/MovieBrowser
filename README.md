@@ -45,7 +45,7 @@ cd movie-browser
 
 ### 2. Set up the backend
 ```bash
-cd server
+cd backend
 npm install
 ```
 
@@ -62,7 +62,7 @@ node index.js
 
 ### 3. Set up the frontend
 ```bash
-cd client
+cd frontend
 npm install
 npm run dev
 ```
