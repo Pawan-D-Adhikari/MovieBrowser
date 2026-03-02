@@ -68,7 +68,7 @@ function Home() {
     }
   };
   return (
-    <div className="overflow-x-hidden w-full">
+    <div className="overflow-y-hidden w-full">
       <Navbar />
       {trending.length > 0 && <Hero movie={trending[0]} />}
 
@@ -155,26 +155,30 @@ function Home() {
         </div>
       )}
       {otherMovies?.length > 0 && (
-        <div className=" relative  overflow-x-hidden w-full  ">
+        <div className=" relative   w-full  ">
+          {loadingMore && (
+            <Center className="mt-4">
+              <Loader size="sm" color="blue" variant="dots" />
+            </Center>
+          )}
           <p className="text-white font-bold text-lg mb-4">Other Movies</p>
           <InfiniteScroll
             dataLength={otherMovies.length}
             next={fetchMoreMovies}
             hasMore={hasMore}
+            scrollableTarget={null}
             endMessage={
               <p className="text-gray-500 text-center mt-4">
                 No more movies to show
               </p>
             }
           >
-            <div className="overflow-hidden">
-              <div className="flex flex-wrap justify-start gap-3 md:gap-4">
-                {otherMovies.map((movie) => (
-                  <div key={movie.id}>
-                    <MovieCard movie={movie} genres={genres} />
-                  </div>
-                ))}
-              </div>
+            <div className="flex flex-wrap justify-start gap-3 md:gap-4">
+              {otherMovies.map((movie) => (
+                <div key={movie.id}>
+                  <MovieCard movie={movie} genres={genres} />
+                </div>
+              ))}
             </div>
           </InfiniteScroll>
           {loadingMore && (
