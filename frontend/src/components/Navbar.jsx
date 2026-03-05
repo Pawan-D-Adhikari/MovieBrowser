@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Filter from "./FilterCard";
 import { useSearchParams } from "react-router-dom";
+import { useFilterStore } from "../store/filterStore";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -14,10 +15,13 @@ function Navbar() {
   const filterButtonRef = useRef(null);
   const inputRef = useRef(null);
   const isSearchPage = location.pathname === "/search";
+
+  const { resetFilters } = useFilterStore();
   const handleTitleClick = () => {
     if (location.pathname === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
+      resetFilters();
       navigate("/");
     }
   };

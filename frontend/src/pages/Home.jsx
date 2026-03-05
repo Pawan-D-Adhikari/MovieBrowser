@@ -108,7 +108,7 @@ function Home() {
       )}
       {toprated.length > 0 && (
         <div className="flex flex-col px-4 py-3 min-w-0 w-full">
-          <p className="text-white font-bold text-lg mb-2">Top Rated Moives</p>
+          <p className="text-white font-bold text-lg mb-2">Top Rated Movies</p>
           <Carousel
             slideSize="10%"
             breakpoints={[
